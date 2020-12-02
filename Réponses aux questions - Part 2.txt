@@ -1,0 +1,3 @@
+1) Quel Api faut-il ajouter à votre projet de développement afin de pouvoir prendre en charge les images au format (JPG, PNG….), que fait cet API? 10 points
+	
+	L'API Windows permet de gérer ces formats.

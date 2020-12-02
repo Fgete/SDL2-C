@@ -1,0 +1,246 @@
+1) Qu’est-ce que la SDL 2 ? (10 points)
+
+	SDL (Simple DirectMedia Layer) est une bibliothèque logicielle.
+	Elle est utilisée pour créer des applications pouvant supporter
+	des médias tels que du son et des images.
+
+2) Que peut faire la SDL 2 ? (10 points)
+
+	La SDL permet de gérer :
+		- l'affichage vidéo
+		- les événements
+		- l'audio numérique
+		- les périphériques
+		- la lecture de CD
+		- le "multithreading"
+		- ...
+
+3) Sur quelles plateformes fonctionne la SDL 2 ? (10 points)
+
+	La SDL 2 fonctionne sur toutes les machines comprenant un language
+	compatible avec la SDL 2 (tel que le C, Java, Python, etc...).
+
+4) Comment obtenir et installer la SDL 2 sur un EDI ?
+Donnez les étapes de la configuration d’un projet SDL2 avec CodeBlocks (gcc). (10 points)
+
+	La SDL 2 est libre. Il est possible de la télécharger sur internet.
+	Quant à son installation, il suffit de configurer le compilateur en
+	appelant les différent éléments de la bibliothèque. De plus, il faudra
+	copier "SDL2.dll" dans le dossier /bin de chaque projet et inclure la
+	bibliothèque dans chaque main.c.
+
+5) Quelles sont les différences entre SDL 1 et SDL 2 ? (5 points)
+
+	SDL 2 apporte des modifications par ci par là. Mais la plus grande modification,
+	c'est l'utilisation de la carte d'accélération graphique pour l'affichage de
+	textures.
+
+6) Pour utiliser la SDL 2 dans votre projet, vous devez initialiser l’instance SDL 2,
+quelles sont les étapes d’initialisation à réaliser pour utiliser la lib SDL 2,
+donnez le code correspondant et expliquez précisément chaque instruction. (15 points)
+
+	Après avoir configuré le projet et le compilateur, il faut appeler la
+	bibliothèque :
+
+		#include <SDL2/SDL.h>
+
+	Ensuite, il faut ajouter des arguments à la fonction main() :
+
+		int main(int argc, char *argv[]){}
+
+	Puis, afin de vérifier si l'initialisation de la SDL s'est bien déroulée,
+	nous écrivons la vérification suivante :
+
+		if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+        		SDL_Log("Unable to initialize SDL : %s", SDL_GetError());
+        		return 1; // return error
+    		}else{
+			// programme si tout s'est bien initialisé
+    		}
+
+	Cette vérification permet d'arrêter le programme s'il la SDL ne s'est pas initialisée
+	correctement.
+
+7) Comment créer une fenêtre avec SDL 2,
+donnez et expliquez le code correspondant à la création d’une fenêtre avec SDL 2. (10 points)
+
+	Tout d'abord, nous allons créer un pointeur fenêtre en globale dans laquelle nous allons
+	travailler : (nous l'initialiserons à NULL)
+	
+		SDL_Window *nomDuPointeurFenetre = NULL;
+
+	Ensuite, il est nécessaire de créer un pointeur de rendu en globale qui nous
+	permettra d'afficher du contenu : (nous l'initialiserons à NULL)
+	
+		SDL_Renderer *nomDuPointeurDeRendu = NULL;
+
+	Une fois la SDL déclarée, nous pouvont l'initialiser avec quelque chose de plus
+	concret dans main() :
+
+	        nomDuPointeurFenetre = SDL_CreateWindow("Nom de la fenetre", 100, 50, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+		// cela créé une fenêtre à l'écran
+
+		nomDuPointeurDeRendu = SDL_CreateRenderer(nomDuPointeurFenetre, -1, SDL_RENDERER_PRESENTVSYNC);
+		// cela créé le rendu intérieur de la fenêtre
+
+8) Gestion d’une fenêtre SDL 2,
+donnez les primitives associées à la fenêtre SDL 2. (10 points)
+
+	nomDuPointeurFenetre = SDL_CreateWindow(
+		"Nom de la fenetre",
+		position en x (px),
+		position en y (px),
+		largeur (px),
+		hauteur (px),
+		mode d'affichage);
+
+9) Gérer un rendu : qu’est-ce qu’un renderer, comment
+est-il associé à la fenêtre SDL 2 ? Donnez et expliquez le
+code permettant de gérer un rendu, création, affichage,
+effacement…. (15 points)
+
+	Une fois la fenêtre créé et initialisée, c'est au tour du renderer :
+
+		nomDuPointeurDeRendu = SDL_CreateRenderer(
+			nomDuPointeurFenetre,
+			-1,
+			SDL_RENDERER_PRESENTVSYNC);
+
+	Le renderer est assigné à la fenêtre pour gérer le rendu de ce qui sera contenu.
+	La fenêtre s'affiche et disparait aussitôt. Nous avons utilisé un timer pour faire
+	attendre le programme et constater l'apparition de la fenêtre :
+		
+		SDL_Delay(temps (ms));
+
+	Pour effacer la fenêtre, soit le programme se ferme et tout disparait, soit
+	il est possible de quitter le SDL :
+		
+		SDL_Quit();
+
+	Cette méthode permet d'effacer tout le SDL.
+
+10) SDL_Point et SDL_Rect :
+Donnez et expliquez le code de la déclaration d’un
+SDL_Point et SDL_Rect (5 points)
+
+	SDL_Point : C'est une structure semblable à un vector2(x, y).
+	C'est un élément à deux dimensions qui peut être utilisé comme position, taille, coordonnée, etc...
+
+		SDL_Point position = {x , y};
+
+	SDL_Rect : C'est une structure contenant les infos d'un rectangle.
+
+		SDL_Rect monRectangle = {x, y, w, h};
+
+11) Les couleurs avec la SDL2 : donnez les instructions
+permettant de gérer la couleur avec la SDL 2
+	
+	Pour ajouter de la couleur à la fenêtre, on peut ordonner
+	au renderer d'afficher une couleur :
+
+		SDL_SetRenderDrawColor(monRenderer, r, g, b, a);
+
+	Il faut ensuite raffraîchir l'affichage :
+
+		SDL_RenderClear(monRenderer);
+            	SDL_RenderPresent(monRenderer);
+
+	La fenêtre s'affiche maintenant de la couleur que vous avez choisi.
+
+12) Donnez le code permettant d’afficher un fond rouge
+dans le rendu.
+
+	Code pour fond rouge :
+
+		SDL_SetRenderDrawColor(monRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            	SDL_RenderClear(monRenderer);
+            	SDL_RenderPresent(monRenderer);
+
+13) Dessiner dans le rendu : donnez le code des fonctions
+permettant de dessiner dans le rendu les formes
+suivantes : (voir screenshot)
+
+	Code pour Carré vide :
+
+		SDL_RenderDrawRect(monRenderer, &monRectangle);
+
+	Code pour Carré plein :
+
+		SDL_RenderFillRect(monRenderer, &monRectangle);
+
+	Code pour Cercle vide :
+		
+		DrawCircle(monRenderer, x, y, rayon, 0);
+
+	Code pour Cercle plein :
+
+		DrawCircle(monRenderer, x, y, rayon, 1);
+
+	Avec la fonction DrawCircle que j'ai créé.
+
+14) Quelles sont les fonctions permettant de dessiner
+des points et des lignes ? (5 points)
+
+	Code pour Ligne :
+
+		SDL_RenderDrawLine(renderer, x, y, xB, yB);
+
+	Code pour Point :
+
+		SDL_RenderDrawPoint(renderer, x, y);
+
+15) A quoi servent les fonctions
+SDL_RenderClear et SDL_RenderPresent (5 points)
+
+	Clear permet de vider le renderer et Present permet d'afficher
+	un nouvel élément par dessus l'existant.
+
+16) Expliquez SDL_Delay (5 points)
+
+	Permet de mettre en pause le programme pendant une durée
+	en milliseconde.
+
+17) Qu’est-ce qu’une surface en SDL 2 (5 points)
+
+	Une surface est une collection de pixels.
+
+18) Donnez le code permettant de créer une surface (10 points)
+
+	Code pour une Surface :
+
+		SDL_Surface *mySurface = SDL_CreateRGBSurface(flag, w, h, depth, r, g, b, a);
+
+19) Dessiner dans une surface :
+Donnez le code de la fonction SDL_FillRect (10 points)
+
+	Code de SDL_FillRect :
+
+		int SDL_FillRect(SDL_Surface* cible, const SDL_Rect* calc, Uint32 maCouleurRGB);
+
+20) SDL_BlitSurface(..) :
+Donnez le code pour tester cette méthode. (5 points)
+
+	int SDL_BlitSurface(SDL_Surface* source, const SDL_Rect* &calc,
+			SDL_Surface* cible, SDL_Rect* cache)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
